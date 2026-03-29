@@ -49,13 +49,13 @@ fi
 ################################################################################## Start uncommented containers
 write_log "Starting stopped containers..."
 for file in $(cat ./compose-files.txt | egrep -v "#" ); do
-    if docker compose -f $file start ; then
+    if docker compose -f $file up ; then
         write_log "Successfully started $file"
     else
         write_error "Issues were encountered starting $file"
     fi
 done
 
-write_log "All containers stopped successfully"
+write_log "All containers specified started successfully. If any didn't, check your compose-files.txt file."
 
 write_log "----SCRIPT FINISHED----"
