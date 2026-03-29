@@ -1,0 +1,3 @@
+# Here you list the compose files on a new line each.
+# Comment out the ones you want to start back up after the script finishes
+#/home/user/docker/nginxdemo/docker-compose.yml

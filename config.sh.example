@@ -1,0 +1,3 @@
+#Directory of docker home
+DOCKER_HOME='/home/user/docker'
+REMOTE_REPO='service-account@server:/some/path

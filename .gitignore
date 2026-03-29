@@ -1,0 +1,5 @@
+config.sh
+key.pem
+log.txt
+*.log
+compose-files.txt
