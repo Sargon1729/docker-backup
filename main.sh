@@ -32,7 +32,7 @@ fi
 
 ################################################################################## Export Archive
 write_log "Copying archive to remote repo..."
-if scp -i $SSH_KEY "$ARCHIVE_NAME" "$REMOTE_REPO" ; then
+if sshpass -p $PASSWORD scp "$ARCHIVE_NAME" "$REMOTE_REPO" ; then
      write_log "Done"
 else
     write_error "Issues were encountered while copying archive to remote repo"
@@ -49,7 +49,7 @@ fi
 ################################################################################## Start uncommented containers
 write_log "Starting stopped containers..."
 for file in $(cat ./compose-files.txt | egrep -v "#" ); do
-    if docker compose -f $file up ; then
+    if docker compose -f $file up -d ; then
         write_log "Successfully started $file"
     else
         write_error "Issues were encountered starting $file"
