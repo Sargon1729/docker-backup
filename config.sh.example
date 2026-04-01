@@ -2,3 +2,5 @@
 DOCKER_HOME='/home/user/docker'
 REMOTE_REPO='service-account@server:/some/path
 PASSWORD='secure-password'
+USE_KEY=NO              # check if you want to use ssh key instead
+SSH_KEY='/path/to/key'

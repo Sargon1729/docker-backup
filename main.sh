@@ -32,10 +32,20 @@ fi
 
 ################################################################################## Export Archive
 write_log "Copying archive to remote repo..."
-if sshpass -p $PASSWORD scp "$ARCHIVE_NAME" "$REMOTE_REPO" ; then
-     write_log "Done"
+if [ $USE_KEY=true ]; then
+    write_log "Using ssh key $SSH_KEY"
+    if scp -i $SSH_KEY "$ARCHIVE_NAME" "$REMOTE_REPO" ; then
+        write_log "Done"
+    else
+        write_error "Issues were encountered while copying archive to remote repo"
+    fi
 else
-    write_error "Issues were encountered while copying archive to remote repo"
+    write_log "Using SSH password"
+    if sshpass -p $PASSWORD scp "$ARCHIVE_NAME" "$REMOTE_REPO" ; then
+        write_log "Done"
+    else
+        write_error "Issues were encountered while copying archive to remote repo"
+    fi
 fi
 
 ################################################################################## Delete local Archive
