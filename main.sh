@@ -5,6 +5,7 @@ source ./logging.sh
 
 write_log "----SCRIPT STARTED----"
 write_log "Docker home directory is $DOCKER_HOME"
+write_log "Use SSH key is set to $USE_KEY"
 
 ################################################################################## Stop all containers
 
@@ -14,7 +15,8 @@ write_log "Stopping all containers..."
 if docker stop $(docker ps -a -q) ; then
     write_log "Successfully all running containers"
 else
-    write_error "Issues were encountered while stopping containers"
+    write_error "Issues were encountered while stopping containers, exiting: 1"
+    exit 1  #exit if there were issues stopping containers
 fi
 
 write_log "All containers stopped successfully"
@@ -22,7 +24,7 @@ write_log "All containers stopped successfully"
 ################################################################################## Create archive locally
 
 write_log "Creating archive..."
-ARCHIVE_NAME="AJRy-archive-$DATE.zip"
+ARCHIVE_NAME="$LOCAL_HOST-archive-$DATE.zip"
 
 if zip -r  -v "./$ARCHIVE_NAME" $DOCKER_HOME ; then
      write_log "Successfully created archive"
@@ -32,19 +34,27 @@ fi
 
 ################################################################################## Export Archive
 write_log "Copying archive to remote repo..."
-if [ $USE_KEY=true ]; then
+if [ $USE_KEY = true ]; then
     write_log "Using ssh key $SSH_KEY"
-    if scp -i $SSH_KEY "$ARCHIVE_NAME" "$REMOTE_REPO" ; then
-        write_log "Done"
+
+     if [ -f $SSH_KEY ]; then   #check if file exists
+
+        if scp -i $SSH_KEY "$ARCHIVE_NAME" "$REMOTE_REPO" ; then
+            write_log "Done"
+        else
+            write_error "Issues were encountered while copying archive to remote repo"
+        fi
     else
-        write_error "Issues were encountered while copying archive to remote repo"
+        write_error "Could not find key file $SSH_KEY"  #error out if file does not exist
+
     fi
 else
     write_log "Using SSH password"
     if sshpass -p $PASSWORD scp "$ARCHIVE_NAME" "$REMOTE_REPO" ; then
         write_log "Done"
     else
-        write_error "Issues were encountered while copying archive to remote repo"
+        write_error "Issues were encountered while copying archive to remote repo, exiting: 1"
+        exit 1
     fi
 fi
 
