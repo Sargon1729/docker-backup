@@ -3,3 +3,4 @@ key.pem
 log.txt
 *.log
 compose-files.txt
+*.zip
