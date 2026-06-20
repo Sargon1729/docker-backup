@@ -4,3 +4,4 @@ log.txt
 *.log
 compose-files.txt
 *.zip
+wrapper.sh
