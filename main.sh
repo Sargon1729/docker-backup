@@ -53,8 +53,7 @@ else
     if sshpass -p $PASSWORD scp "$ARCHIVE_NAME" "$REMOTE_REPO" ; then
         write_log "Done"
     else
-        write_error "Issues were encountered while copying archive to remote repo, exiting: 1"
-        exit 1
+        write_error "Issues were encountered while copying archive to remote repo"
     fi
 fi
 
